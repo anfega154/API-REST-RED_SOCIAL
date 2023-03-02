@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const url = "mongodb://127.0.0.1:27017/mi_blog";
+const url = "mongodb://127.0.0.1:27017/mi_red_social";
 mongoose.set("strictQuery", true);
 const conecction = async () => {
   try {
