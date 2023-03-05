@@ -12,9 +12,9 @@ app.use(express.json());
 const routerUser = require('./routers/user');
 const routerFollow= require('./routers/follow');
 const routerPublication = require('./routers/publication');
-app.use("api/",routerUser);
-app.use("api/",routerFollow);
-app.use("api/",routerPublication);
+app.use("/api/user",routerUser);
+app.use("/api/follow",routerFollow);
+app.use("/api/publication",routerPublication);
 app.get("/",(req,res)=>{
 
   res.status(200).json({
