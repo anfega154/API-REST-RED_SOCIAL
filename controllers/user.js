@@ -1,5 +1,16 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const jwt = require('../services/jwt')
+
+const prueba =(req,res)=>{
+
+  return res.status(200).json({
+
+    status:"success",
+    message:"prueba exitosa",
+    user:req.user
+  })
+}
 
 const register = async (req, res) => {
   try {
@@ -47,6 +58,60 @@ const register = async (req, res) => {
   }
 };
 
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        status: "error",
+        message: "Faltan datos por enviar",
+      });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        status: "error",
+        message: "Usuario no existe",
+      });
+    }
+
+    const pwd = await bcrypt.compare(password, user.password);
+
+    if (!pwd) {
+      return res.status(400).json({
+        status: "error",
+        message: "Contraseña incorrecta",
+      });
+    }
+// hacer  un token 
+const token=jwt.createToken(user);
+
+
+    return res.status(200).json({
+      status: "success",
+      message: "Login exitoso",
+      user:{
+        id:user._id,
+        name:user.name,
+        nick:user.nick
+      },
+      token
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: "error",
+      message: "Ocurrió un error",
+    });
+  }
+};
+
+
 module.exports = {
   register,
+  login,
+  prueba,
 };
